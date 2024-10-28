@@ -1,75 +1,117 @@
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { Metadata } from "next";
-import DefaultLayout from "@/components/Layouts/DefaultLaout";
-import Signin from "@/components/Auth/Signin";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Next.js Login Page | NextAdmin - Next.js Dashboard Kit",
-  description: "This is Next.js Login Page NextAdmin Dashboard Kit",
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { FaGoogle, FaEnvelope, FaLock } from "react-icons/fa";
+import useLocalStorage from "./../../../hooks/useLocalStorage"; // Adjust the import based on your file structure
+
+const Signin: React.FC = () => {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [token, setToken] = useLocalStorage<string | null>("token", null); // Hook for local storage
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    try {
+        const response = await fetch("http://localhost:3020/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        });
+
+        if (!response.ok) throw new Error("Login failed");
+
+        const data = await response.json(); // Parse the JSON response
+        console.log(data); // Log the response to check its structure
+
+        setToken(data.access_token); // Access the token correctly
+        router.push("/");
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        setError("Login failed. Please check your credentials.");
+    }
 };
 
-const SignIn: React.FC = () => {
   return (
-    <DefaultLayout>
-      <Breadcrumb pageName="Sign In" />
+    <div className="w-full max-w-md mx-auto p-8">
+      {/* Google Sign-in Button */}
+      <button className="flex items-center justify-center w-full bg-white text-gray-700 border rounded px-4 py-2 mb-4 shadow-sm hover:bg-gray-100">
+        <FaGoogle className="mr-2" />
+        Sign in with Google
+      </button>
+      {/* Divider */}
+      <div className="flex items-center justify-center my-4">
+        <span className="w-full border-t border-gray-300"></span>
+      </div>
+      <div className="flex items-center justify-center my-4">
+        <span className="px-2 text-gray-500">Or sign in with email</span>
+      </div>
 
-      <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
-        <div className="flex flex-wrap items-center">
-          <div className="w-full xl:w-1/2">
-            <div className="w-full p-4 sm:p-12.5 xl:p-15">
-              <Signin />
-            </div>
-          </div>
+      {/* Error message */}
+      {error && <p className="text-red-500 mb-4">{error}</p>}
 
-          <div className="hidden w-full p-7.5 xl:block xl:w-1/2">
-            <div className="custom-gradient-1 overflow-hidden rounded-2xl px-12.5 pt-12.5 dark:!bg-dark-2 dark:bg-none">
-              <Link className="mb-10 inline-block" href="/">
-                <Image
-                  className="hidden dark:block"
-                  src={"/images/logo/logo.svg"}
-                  alt="Logo"
-                  width={176}
-                  height={32}
-                />
-                <Image
-                  className="dark:hidden"
-                  src={"/images/logo/logo-dark.svg"}
-                  alt="Logo"
-                  width={176}
-                  height={32}
-                />
-              </Link>
-              <p className="mb-3 text-xl font-medium text-dark dark:text-white">
-                Sign in to your account
-              </p>
-
-              <h1 className="mb-4 text-2xl font-bold text-dark dark:text-white sm:text-heading-3">
-                Welcome Back!
-              </h1>
-
-              <p className="w-full max-w-[375px] font-medium text-dark-4 dark:text-dark-6">
-                Please sign in to your account by completing the necessary
-                fields below
-              </p>
-
-              <div className="mt-31">
-                <Image
-                  src={"/images/grids/grid-02.svg"}
-                  alt="Logo"
-                  width={405}
-                  height={325}
-                  className="mx-auto dark:opacity-30"
-                />
-              </div>
-            </div>
+      {/* Email and Password fields */}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <div className="flex items-center border rounded px-3 py-2">
+            <FaEnvelope className="text-gray-500 mr-2" />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full outline-none"
+            />
           </div>
         </div>
-      </div>
-    </DefaultLayout>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Password</label>
+          <div className="flex items-center border rounded px-3 py-2">
+            <FaLock className="text-gray-500 mr-2" />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full outline-none"
+            />
+          </div>
+        </div>
+
+        {/* Remember me and Forgot Password */}
+        <div className="flex items-center justify-between">
+          <label className="flex items-center text-sm text-gray-600">
+            <input type="checkbox" className="mr-2" />
+            Remember me
+          </label>
+          <a href="#" className="text-sm text-blue-500 hover:underline">
+            Forgot Password?
+          </a>
+        </div>
+
+        {/* Submit button */}
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+        >
+          Sign In
+        </button>
+      </form>
+
+      {/* Sign Up link */}
+      {/* <p className="mt-4 text-center text-sm text-gray-600">
+        Don’t have any account?{" "}
+        <a href="#" className="text-blue-500 hover:underline">
+          Sign Up
+        </a>
+      </p> */}
+    </div>
   );
 };
 
-export default SignIn;
+export default Signin;

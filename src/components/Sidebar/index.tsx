@@ -7,11 +7,17 @@ import Image from "next/image";
 import SidebarItem from "@/components/Sidebar/SidebarItem";
 import ClickOutside from "@/components/ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
 
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
 }
+
+
+
 
 const menuGroups = [
   {
@@ -289,7 +295,7 @@ const menuGroups = [
         label: "Authentication",
         route: "#",
         children: [
-          { label: "Sign In", route: "/auth/signin" },
+          { label: "Sign Out", route: "/auth/signin" },
         ],
       },
     ],
@@ -297,6 +303,17 @@ const menuGroups = [
 ];
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+  const router = useRouter();
+  const [token] = useLocalStorage<string | null>("token", null);
+  if(!token)
+  {
+    useEffect(() => {
+      // Redirect to the Signin page when the component mounts
+      router.push("/auth/signin");
+    }, [router]);
+  }
+
+
   const pathname = usePathname();
 
   const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");

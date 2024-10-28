@@ -24,7 +24,18 @@ const nextConfig = {
         port: ""
       }
     ]
-  }
+  },
+  /* redirects: async () => {
+    
+    return [
+      {
+        source: "/",
+        destination: "/auth/signin",
+        permanent: false,
+      },
+    ];
+  }, */
+  
 };
 
 export default nextConfig;
