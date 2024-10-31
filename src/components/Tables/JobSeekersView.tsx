@@ -1,42 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react"; // Import useEffect to fetch data
-import { Package } from "@/types/package";
+import React from "react";
+import { Claim } from "../../types/claim";
+import { useState } from "react"; 
 
-// Define a new type for the employee data fetched from the API
-interface Employee {
-  id: number; // Adjust the properties based on your actual API response
-  name: string;
-  email: string;
-  // Add any other relevant properties
-}
 
-const TableThree = () => {
-  // Initialize state to manage attendance for each employee and store user data
+const packageData: Claim[] = [
+  {
+    name: "Foulen ben foulen",
+    email: "FoulenBenFoulen@gmail.com",
+    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    status: true,
+
+  },
+];
+
+const JobSeekersView = () => {
+  // Initialize state to manage attendance for each employee
   const [attendance, setAttendance] = useState<{ [key: number]: boolean }>({});
-  const [employees, setEmployees] = useState<Employee[]>([]); // State to hold fetched employees
 
   const handleCheckboxChange = (index: number) => {
     setAttendance((prev) => ({ ...prev, [index]: !prev[index] }));
   };
-
-  useEffect(() => {
-    // Fetch user data from the API
-    const fetchEmployees = async () => {
-      try {
-        const response = await fetch("http://localhost:3020/users");
-        if (!response.ok) {
-          throw new Error("Failed to fetch users");
-        }
-        const data: Employee[] = await response.json();
-        setEmployees(data);
-      } catch (error) {
-        console.error("Error fetching employees:", error);
-      }
-    };
-
-    fetchEmployees();
-  }, []); // Empty dependency array means this effect runs once on mount
 
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
@@ -45,13 +30,16 @@ const TableThree = () => {
           <thead>
             <tr className="bg-[#F7F9FC] text-left dark:bg-dark-2">
               <th className="min-w-[220px] px-4 py-4 font-medium text-dark dark:text-white xl:pl-7.5">
-                Employees
+                Name
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-dark dark:text-white">
                 Emails
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-dark dark:text-white">
-                Attendance
+                Motivation letter
+              </th>
+              <th className="min-w-[120px] px-4 py-4 font-medium text-dark dark:text-white">
+                Status
               </th>
               <th className="px-4 py-4 text-right font-medium text-dark dark:text-white xl:pr-7.5">
                 Actions
@@ -59,41 +47,51 @@ const TableThree = () => {
             </tr>
           </thead>
           <tbody>
-            {employees.map((employee, index) => (
-              <tr key={employee.id}>
+            {packageData.map((packageItem, index) => (
+              <tr key={index}>
                 <td
-                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5 ${index === employees.length - 1 ? "border-b-0" : "border-b"}`}
+                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5 ${index === packageData.length - 1 ? "border-b-0" : "border-b"}`}
                 >
                   <h5 className="text-dark dark:text-white">
-                    {employee.name}
+                    {packageItem.name}
                   </h5>
+                 
                 </td>
                 <td
-                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 ${index === employees.length - 1 ? "border-b-0" : "border-b"}`}
+                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 ${index === packageData.length - 1 ? "border-b-0" : "border-b"}`}
                 >
                   <p className="text-dark dark:text-white">
-                    {employee.email}
+                    {packageItem.email}
                   </p>
                 </td>
                 <td
-                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 ${index === employees.length - 1 ? "border-b-0" : "border-b"}`}
+                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 ${index === packageData.length - 1 ? "border-b-0" : "border-b"}`}
+                >
+                  <p className="text-dark dark:text-white">
+                    {packageItem.content}
+                  </p>
+                </td>
+                <td
+                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 ${index === packageData.length - 1 ? "border-b-0" : "border-b"}`}
                 >
                   <div className="flex items-center space-x-2">
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={attendance[index] || false}
+                        checked={attendance[index] ?? false}
                         onChange={() => handleCheckboxChange(index)}
-                        className="form-checkbox"
+                        className="form-checkbox h-4 w-4 text-blue-600"
                       />
-                      <span className="ml-2">Present</span>
+                      <span className="ml-2 text-body-sm font-medium">Accept</span>
                     </label>
+                    
                   </div>
                 </td>
                 <td
-                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 ${index === employees.length - 1 ? "border-b-0" : "border-b"}`}
+                  className={`border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 ${index === packageData.length - 1 ? "border-b-0" : "border-b"}`}
                 >
                   <div className="flex items-center justify-end space-x-3.5">
+                    {/* Your action buttons here */}
                     <button className="hover:text-primary">Edit</button>
                     <button className="hover:text-primary">Delete</button>
                   </div>
@@ -107,4 +105,4 @@ const TableThree = () => {
   );
 };
 
-export default TableThree;
+export default JobSeekersView;

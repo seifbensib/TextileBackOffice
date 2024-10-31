@@ -15,6 +15,7 @@ const FormLayout = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName="Form Layout" />
+    
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
         <div className="flex flex-col gap-9">
@@ -25,6 +26,7 @@ const FormLayout = () => {
                 Contact Form
               </h3>
             </div>
+            
             <form action="#">
               <div className="p-6.5">
                 <div className="mb-4.5 flex flex-col gap-4.5 xl:flex-row">
@@ -193,6 +195,7 @@ const FormLayout = () => {
           </div>
         </div>
       </div>
+    
     </DefaultLayout>
   );
 };

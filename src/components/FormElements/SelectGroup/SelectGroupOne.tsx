@@ -12,7 +12,7 @@ const SelectGroupOne: React.FC = () => {
   return (
     <div className="mb-4.5">
       <label className="mb-3 block text-body-sm text-dark dark:text-white">
-        Subject
+        Product
       </label>
 
       <div className="relative z-20 bg-transparent dark:bg-dark-2">
@@ -27,16 +27,16 @@ const SelectGroupOne: React.FC = () => {
           }`}
         >
           <option value="" disabled className="text-dark-6">
-            Select your subject
+          Textile Type 0
           </option>
           <option value="USA" className="text-dark-6">
-            USA
+            Textile Type 1
           </option>
           <option value="UK" className="text-dark-6">
-            UK
+          Textile Type 2
           </option>
           <option value="Canada" className="text-dark-6">
-            Canada
+          Textile Type 3
           </option>
         </select>
 
