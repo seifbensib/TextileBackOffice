@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "apexcharts": "^3.45.2",
     "flatpickr": "^4.6.13",
     "jsonwebtoken": "^9.0.2",

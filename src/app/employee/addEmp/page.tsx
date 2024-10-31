@@ -14,8 +14,8 @@ const AddEmp = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted"); // Add this to verify submission
-
+    console.log("Form submitted");
+  
     const employeeData = {
       firstName,
       lastName,
@@ -25,15 +25,15 @@ const AddEmp = () => {
       post,
       note,
     };
-
+  
     console.log("Employee Data before submit:", employeeData);
-
+  
     try {
       const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-
+  
       if (token) {
-        console.log("Token found:", JSON.parse(token)); // Check if token is available
-
+        console.log("Token found:", JSON.parse(token));
+  
         const response = await fetch("http://localhost:3020/users/create-employee", {
           method: "POST",
           headers: {
@@ -42,15 +42,16 @@ const AddEmp = () => {
           },
           body: JSON.stringify(employeeData),
         });
-
+  
         if (!response.ok) {
           const errorMessage = await response.text();
           throw new Error(`Failed to add employee: ${errorMessage}`);
         }
-
+  
         const result = await response.json();
         console.log("Employee added successfully:", result);
-
+        alert("Employee added successfully!"); // Notification alert
+  
       } else {
         console.log("No token found");
       }
@@ -59,6 +60,7 @@ const AddEmp = () => {
       alert("Failed to add employee. Please try again.");
     }
   };
+  
 
   return (
     <DefaultLayout>

@@ -1,13 +1,13 @@
+"use client";
 import React from "react";
-
 interface InputGroupProps {
   customClasses?: string;
   label: string;
   type: string;
   placeholder: string;
   required?: boolean;
-  value?: string; // Added this prop for value
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Added this prop for onChange
+  value?: string | number; // Allow value to be a string or number
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const InputGroup: React.FC<InputGroupProps> = ({
