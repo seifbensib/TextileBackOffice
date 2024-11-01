@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
-import AttendanceTable from "@/components/Tables/AttandanceTable";
+import AttendanceTable from "@/components/Tables/AttandanceTableEmp";
 
 export const metadata: Metadata = {
   title: "Next.js Tables Page | NextAdmin - Next.js Dashboard Kit",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const Presnece = () => {
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="Tables" />
+      <Breadcrumb pageName="Attendance" />
 
       <div className="flex flex-col gap-10">
     

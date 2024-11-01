@@ -4,6 +4,7 @@ import { useState } from "react";
 import InputGroup from "@/components/FormElements/InputGroup";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
+import Swal from "sweetalert2";
 
 const AddEmp = () => {
   const [firstName, setFirstName] = useState("");
@@ -34,6 +35,7 @@ const AddEmp = () => {
       if (token) {
         console.log("Token found:", JSON.parse(token));
   
+        // Create Employee
         const response = await fetch("http://localhost:3020/users/create-employee", {
           method: "POST",
           headers: {
@@ -48,9 +50,41 @@ const AddEmp = () => {
           throw new Error(`Failed to add employee: ${errorMessage}`);
         }
   
-        const result = await response.json();
-        console.log("Employee added successfully:", result);
-        alert("Employee added successfully!"); // Notification alert
+        const employeeResult = await response.json();
+        console.log("Employee added successfully:", employeeResult);
+        Swal.fire({
+          title: 'Employee Added',
+          text: `Email : ${employeeResult.email} \n 
+                 Password : ${employeeResult.password}
+          `,
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+        // Create Attendance
+        const attendanceData = {
+          employee: employeeResult._id, // Use the ID of the newly created employee
+          employeeName: `${firstName} ${lastName}`,
+          employeeEmail: email,
+          days: Array(31).fill(false), // Default for 30 days
+        };
+  
+        const attendanceResponse = await fetch("http://localhost:3020/attendance", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${JSON.parse(token)}`,
+          },
+          body: JSON.stringify(attendanceData),
+        });
+  
+        if (!attendanceResponse.ok) {
+          const errorMessage = await attendanceResponse.text();
+          throw new Error(`Failed to create attendance: ${errorMessage}`);
+        }
+  
+        const attendanceResult = await attendanceResponse.json();
+        console.log("Attendance created successfully:", attendanceResult);
+        alert("Attendance created successfully!"); // Notification alert
   
       } else {
         console.log("No token found");

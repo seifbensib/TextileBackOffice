@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaGoogle, FaEnvelope, FaLock } from "react-icons/fa";
 import useLocalStorage from "./../../../hooks/useLocalStorage"; // Adjust the import based on your file structure
+import { FaEnvelope, FaLock, FaGoogle } from "react-icons/fa"; // Import the required icons
 
 const Signin: React.FC = () => {
   const router = useRouter();
